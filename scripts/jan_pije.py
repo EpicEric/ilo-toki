@@ -6,7 +6,7 @@ NEW_WORDS_PER_LESSON = {
     5: ['ike', 'jaki', 'lawa', 'len', 'lili', 'mute', 'nasa', 'seli', 'sewi', 'tomo', 'utala'],
     6: ['kama', 'kepeken', 'kiwen', 'kon', 'lon', 'pana', 'poki', 'toki', 'tawa'],
     7: ['anpa', 'insa', 'monsi', 'sama', 'tan', 'poka'],
-    8: ['ala', 'ale', 'ali', 'ken', 'musi', 'pali', 'sona', 'wawa'],
+    8: ['ala', 'ale', 'ali', 'ken', 'lape', 'musi', 'pali', 'sona', 'wawa'],
     9: ['a', 'awen', 'mama', 'mije', 'meli', 'mu', 'nimi', 'o'],
     10: ['olin', 'seme', 'sin', 'supa', 'suwi'],
     11: ['pi', 'kalama', 'kulupu', 'nasin'],
