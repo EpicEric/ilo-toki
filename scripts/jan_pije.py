@@ -19,14 +19,13 @@ NEW_WORDS_PER_LESSON = {
     18: ['alasa', 'namako', 'pu', 'esun', 'pan']
 }
 
-REGEX_LIST = None
+REGEX_LIST = sorted(
+    [(lesson, r'\b({})\b'.format('|'.join(words))) for (lesson, words) in NEW_WORDS_PER_LESSON.items()],
+    key=lambda x: x[0], reverse=True
+)
 
 
 def get_lesson_for_sentence(sentence):
-    global REGEX_LIST
-    if not REGEX_LIST:
-        REGEX_LIST = [(lesson, r'\b({})\b'.format('|'.join(words))) for (lesson, words) in NEW_WORDS_PER_LESSON.items()]
-        REGEX_LIST.sort(key=lambda x: x[0], reverse=True)
     for (lesson, regex) in REGEX_LIST:
         if re.search(regex, sentence):
             return lesson

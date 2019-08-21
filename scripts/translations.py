@@ -11,10 +11,16 @@ SENTENCES_URL = 'https://downloads.tatoeba.org/exports/sentences.tar.bz2'
 LINKS_CSV = 'links.csv'
 LINKS_URL = 'https://downloads.tatoeba.org/exports/links.tar.bz2'
 
+SEEK_CACHE_CHUNK = 1000
+
+DEBUG_ENVVAR_KEY = 'DEBUG'
+DEBUG_ENVVAR_VALUE = 'true'
+DEBUG_FILE = 'translations.csv'
+
 
 class LastUpdatedOrderedDict(collections.OrderedDict):
-        """Store items in the order the keys were last added"""
-        #
+        """Store items in the order the keys were last added."""
+
         def __setitem__(self, key, value):
             if key in self:
                 del self[key]
@@ -22,6 +28,14 @@ class LastUpdatedOrderedDict(collections.OrderedDict):
 
 
 def generate_translations():
+    if os.environ.get(DEBUG_ENVVAR_KEY, '').lower() == DEBUG_ENVVAR_VALUE.lower():
+        if os.path.isfile(DEBUG_FILE):
+            print('Loading debug data from translations file "{}"...'.format(DEBUG_FILE))
+            with open(DEBUG_FILE, newline='') as debug_csv:
+                return list(csv.reader(debug_csv, delimiter='\t', quoting=csv.QUOTE_NONE, quotechar=''))
+        else:
+            raise OSError('Missing debug translations file {}'.format(DEBUG_FILE))
+
     with tempfile.TemporaryDirectory() as tempdir:
 
         print('Fetching "{}" from Tatoeba.org...'.format(SENTENCES_CSV))
@@ -40,8 +54,7 @@ def generate_translations():
                 archive.extractall(path=tempdir)
         links_file = os.path.join(tempdir, LINKS_CSV)
 
-        SEEK_CACHE_CHUNK = 1000
-        SEEK_CACHE = {0: 0}
+        seek_cache = {0: 0}
         print('Generating seek cache with chunk size of {}...'.format(SEEK_CACHE_CHUNK))
         with open(sentences_file, newline='') as cache_file:
             tell = cache_file.tell()
@@ -52,13 +65,13 @@ def generate_translations():
                 new_index = int(line.split('\t')[0])
                 new_index_pos = new_index % SEEK_CACHE_CHUNK
                 if new_index_pos == 0 or new_index_pos < index_pos:
-                    SEEK_CACHE[new_index // SEEK_CACHE_CHUNK] = tell
+                    seek_cache[new_index // SEEK_CACHE_CHUNK] = tell
                 index = new_index
                 index_pos = new_index_pos
                 if SEEK_CACHE_CHUNK - index_pos < 20: # If getting close to end of chunk, keep updating tell
                     tell = cache_file.tell()
                 line = cache_file.readline()
-        print('  ... Created {} cache keys.'.format(len(SEEK_CACHE)))
+        print('  ... Created {} cache keys.'.format(len(seek_cache)))
 
         TRANSLATIONS_DICT = LastUpdatedOrderedDict()
         print('Generating translations...')
@@ -83,7 +96,7 @@ def generate_translations():
                         while True:
                             # Handle index possibly missing in seek cache
                             try:
-                                english_csv.seek(SEEK_CACHE[seek_cache_index])
+                                english_csv.seek(seek_cache[seek_cache_index])
                                 break
                             except KeyError:
                                 if seek_cache_index == 0:
