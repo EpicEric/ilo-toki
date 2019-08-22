@@ -1,14 +1,22 @@
-# ilo toki ![Heroku](https://heroku-badge.herokuapp.com/?app=ilo-toki)
+# ilo toki
 
 Simple web application and API to learn Toki Pona from a corpus of sentences and their English translations.
 
 ## Features / ijo lon
 
-All the following features are currently WIP. They are integrated into the persistence scripts and API, but are not yet available through a front-end.
+All of the following features are currently WIP. They are integrated into the persistence scripts and API, but are not yet available through a front-end.
 
 - Filter by [jan Pije's lessons](http://tokipona.net/tp/janpije/okamasona.php) if you are learning along.
 - Choose between translating Toki Pona <-> English or the other way around.
 - Found an error? Improve the original sentences on Tatoeba.
+
+## Status / tenpo lon
+
+| Service | Status |
+|---------|--------|
+| API | ![API badge](https://heroku-badge.herokuapp.com/?app=ilo-toki&root=api/healthcheck) |
+| Database script | [![Database script badge](https://circleci.com/gh/EpicEric/ilo-toki.svg?style=svg)](https://circleci.com/gh/EpicEric/ilo-toki) |
+| Frontend | ![Frontend badge](https://img.shields.io/badge/-WIP-inactive)
 
 ## Project structure / sijelo ilo
 
@@ -23,6 +31,7 @@ The project is structured as follows:
 - `app.py`: Main Flask application.
 - `scripts/`: Database definitions and auxiliary scripts, such as scripts to download translations and insert to PostgreSQL. See the [README](scripts/README.md) for more information.
 - `Procfile` and `app.json`: Heroku's application and manifest files, respectively.
+- `.circleci`: CircleCI script to re-populate database every week.
 
 ## Attributions / jo pi jan ante
 

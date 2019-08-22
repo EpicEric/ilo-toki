@@ -10,6 +10,7 @@ import scripts.database as database
 import scripts.jan_pije as jan_pije
 
 DEFAULT_RANDOM_SAMPLE_SIZE = 25
+MAXIMUM_RANDOM_SAMPLE_SIZE = 100
 
 
 app = flask.Flask(__name__)
@@ -34,6 +35,19 @@ def not_found(error):
     return error_dict, 404
 
 
+# Database healthcheck API
+@app.route('/api/healthcheck', methods=['GET'])
+def healthcheck():
+    error_dict = {'status': 'error', 'reason': 'Unknown error'}
+    try:
+        database.db.engine.execute('SELECT true')
+        data_dict = {'status': 'success'}
+        return data_dict
+    except Exception as err:
+        error_dict['reason'] = 'Database is unavailable'
+        return error_dict, 500
+
+
 # Lessons API
 @app.route('/api/lessons', methods=['GET'])
 def lessons():
@@ -53,13 +67,20 @@ def sentences():
     except ValueError:
         error_dict['reason'] = 'maximum_lesson must be a valid integer'
         return error_dict, 400
+    try:
+        sample_size = min(
+            int(flask.request.args.get('sample_size', DEFAULT_RANDOM_SAMPLE_SIZE)),
+            MAXIMUM_RANDOM_SAMPLE_SIZE)
+    except ValueError:
+        error_dict['reason'] = 'sample_size must be a valid integer <= {}'.format(MAXIMUM_RANDOM_SAMPLE_SIZE)
+        return error_dict, 400
     # Get data from database
     query = database.Translation.query
     if not extinct_words:
         query = query.filter_by(has_extinct_words=False)
     if maximum_lesson > 0:
         query = query.filter(database.Translation.lesson <= maximum_lesson)
-    rows = query.random_sample(DEFAULT_RANDOM_SAMPLE_SIZE)
+    rows = query.random_sample(sample_size)
     if len(rows) == 0:
         error_dict['reason'] = 'No matching data found'
         return error_dict
