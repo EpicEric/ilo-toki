@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 import flask
 import flask_cors
-import flask_sqlalchemy
+import flask_marshmallow
 import os
 import threading
 import time
 
+import database
+import scripts.jan_pije
 
-# Random sampling with PostgreSQL extension tsm_system_rows
-class TablesampleQuery(flask_sqlalchemy.BaseQuery):
-    def random_sample(n):
-        return self.suffix_with('TABLESAMPLE SYSTEM_ROWS(%d)' % n).all()
+DEFAULT_RANDOM_SAMPLE_SIZE = 25
 
 
 app = flask.Flask(__name__)
@@ -20,31 +19,52 @@ app.config.from_mapping(
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://localhost/ilo-toki'),
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 )
-db = flask_sqlalchemy.SQLAlchemy(app, query_class=TablesampleQuery)
+database.db.init_app(app)
+ma = flask_marshmallow.Marshmallow(app)
 
 
-# Translation model
-class Translation(db.Model):
-    __tablename__ = 'translations'
+class TranslationSchema(ma.ModelSchema):
+    class Meta:
+        model = database.Translation
 
-    toki_pona_id = db.Column(db.Integer, unique=True, nullable=False)
-    toki_pona_text = db.Column(db.Text, nullable=False)
-    english_id = db.Column(db.Integer, unique=True, nullable=False)
-    english_text db.Column(db.Text, nullable=False)
-    lesson = db.Column(db.Integer, nullable=False)
-    has_extinct_words = db.Column(db.Boolean, nullable=False)
 
-    def __repr__(self):
-        return '<Translation toki({})=eng({})>'.format(self.toki_pona_id, self.english_id)
+@app.errorhandler(404)
+def not_found(error):
+    error_dict = {'status': 'error', 'reason': 'Page not found'}
+    return error_dict, 404
+
+
+# Lessons API
+@app.route('/api/lessons', methods=['GET'])
+def lessons():
+    data = sorted(list(scripts.jan_pije.NEW_WORDS_PER_LESSON.keys()))
+    data_dict = {'status': 'success', 'data': data}
+    return data_dict
 
 
 # Sentences API
-@app.route('/sentences', methods=['GET'])
+@app.route('/api/sentences', methods=['GET'])
 def sentences():
     error_dict = {'status': 'error', 'reason': 'Unknown error'}
-    # TODO: Get data from database
-    error_dict['reason'] = 'Unimplemented endpoint'
-    return flask.jsonify(error_dict)
+    # Get filter parameters (extinct_words, maximum_lesson)
+    extinct_words = flask.request.args.get('extinct_words', '').lower() == 'true'
+    try:
+        maximum_lesson = int(flask.request.args.get('maximum_lesson', '0'))
+    except ValueError:
+        error_dict['reason'] = 'maximum_lesson must be a valid integer'
+        return error_dict, 400
+    # Get data from database
+    query = database.Translation.query
+    if not extinct_words:
+        query = query.filter_by(has_extinct_words=False)
+    if maximum_lesson > 0:
+        query = query.filter(database.Translation.lesson <= maximum_lesson)
+    rows = query.random_sample(DEFAULT_RANDOM_SAMPLE_SIZE)
+    if len(rows) == 0:
+        error_dict['reason'] = 'No matching data found'
+        return error_dict
+    data_dict = {'status': 'success', 'data': TranslationSchema().dump(rows, many=True)}
+    return data_dict
 
 
 # Serve front-end
@@ -53,9 +73,9 @@ def enigma():
     error_dict = {'status': 'error', 'reason': 'Unknown error'}
     # TODO: Serve frontend
     error_dict['reason'] = 'Unimplemented endpoint'
-    return flask.jsonify(error_dict)
+    return error_dict, 500
 
 
 if __name__ == '__main__':
-    app.debug = bool(os.environ.get('DEBUG_MODE'))
+    app.debug = bool(os.environ.get('DEBUG'))
     app.run()

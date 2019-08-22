@@ -38,8 +38,10 @@ def main():
     with psycopg2.connect(database_url) as conn:
         with conn.cursor() as curs:
             curs.execute('CREATE EXTENSION IF NOT EXISTS tsm_system_rows;')
+            curs.execute('DROP TABLE IF EXISTS translations;')
             curs.execute("""
-                CREATE TABLE IF NOT EXISTS translations (
+                CREATE TABLE translations (
+                    id SERIAL NOT NULL PRIMARY KEY,
                     toki_pona_id INTEGER UNIQUE NOT NULL,
                     toki_pona_text TEXT NOT NULL,
                     english_id INTEGER UNIQUE NOT NULL,
@@ -47,7 +49,6 @@ def main():
                     lesson INTEGER NOT NULL,
                     has_extinct_words BOOLEAN NOT NULL
                 );""")
-            curs.execute('DELETE FROM translations;')
             psycopg2.extras.execute_values(curs, """
                     INSERT INTO translations
                         (toki_pona_id, toki_pona_text, english_id, english_text, lesson, has_extinct_words)

@@ -1,5 +1,7 @@
 Flask==1.1.1
 Flask-Cors==3.0.8
+flask-marshmallow==0.10.1
 Flask-SQLAlchemy==2.4.0
 gunicorn==19.9.0
+marshmallow-sqlalchemy==0.17.0
 psycopg2-binary==2.8.3

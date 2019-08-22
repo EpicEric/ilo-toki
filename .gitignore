@@ -1,6 +1,12 @@
 
-# Created by https://www.gitignore.io/api/osx,linux,python
-# Edit at https://www.gitignore.io/?templates=osx,linux,python
+# Created by https://www.gitignore.io/api/osx,code,linux,python
+# Edit at https://www.gitignore.io/?templates=osx,code,linux,python
+
+### Code ###
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 ### Linux ###
 *~
@@ -171,6 +177,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# End of https://www.gitignore.io/api/osx,linux,python
+# End of https://www.gitignore.io/api/osx,code,linux,python
 
 translations.csv
