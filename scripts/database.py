@@ -4,7 +4,6 @@ import random
 
 
 # Random sampling with PostgreSQL extension tsm_system_rows
-# TODO: See if this needs improvement?
 class TablesampleQuery(flask_sqlalchemy.BaseQuery):
     def random_sample(self, n):
         return self.order_by(func.random()).limit(n).all()

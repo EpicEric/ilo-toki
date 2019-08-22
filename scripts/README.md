@@ -25,3 +25,4 @@ Prints list of Tatoeba sentences IDs with invalid words to stderr. To export the
 - `translations.py` - Handles downloading, filtering and generating translation data from Tatoeba. For debugging with an existing `translation.csv` file in this directory instead of getting content remotely, set the envvar `DEBUG=true`.
 - `jan_pije.py` - Finds the respective [jan Pije lesson](http://tokipona.net/tp/janpije/okamasona.php) for a given sentence.
 - `words.py` - List of all non-borrowed words in Toki Pona, whether official or extinct/extra.
+- `database.py` - Database configuration with SQLAlchemy.

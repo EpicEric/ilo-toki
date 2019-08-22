@@ -6,8 +6,8 @@ import os
 import threading
 import time
 
-import database
-import scripts.jan_pije
+import scripts.database as database
+import scripts.jan_pije as jan_pije
 
 DEFAULT_RANDOM_SAMPLE_SIZE = 25
 
@@ -37,7 +37,7 @@ def not_found(error):
 # Lessons API
 @app.route('/api/lessons', methods=['GET'])
 def lessons():
-    data = sorted(list(scripts.jan_pije.NEW_WORDS_PER_LESSON.keys()))
+    data = sorted(list(jan_pije.NEW_WORDS_PER_LESSON.keys()))
     data_dict = {'status': 'success', 'data': data}
     return data_dict
 
@@ -69,7 +69,7 @@ def sentences():
 
 # Serve front-end
 @app.route('/', methods=['GET'])
-def enigma():
+def index():
     error_dict = {'status': 'error', 'reason': 'Unknown error'}
     # TODO: Serve frontend
     error_dict['reason'] = 'Unimplemented endpoint'
