@@ -22,7 +22,6 @@ def main():
         raise KeyError('The {} envvar must be set.'.format(DATABASE_ENVVAR))
     app = flask.Flask(__name__)
     app.config.from_mapping(
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'dev_key'),
         SQLALCHEMY_DATABASE_URI = os.environ[DATABASE_ENVVAR],
         SQLALCHEMY_TRACK_MODIFICATIONS = False
     )
