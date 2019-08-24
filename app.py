@@ -88,15 +88,6 @@ def sentences():
     return data_dict
 
 
-# Serve front-end
-@app.route('/', methods=['GET'])
-def index():
-    error_dict = {'status': 'error', 'reason': 'Unknown error'}
-    # TODO: Serve frontend
-    error_dict['reason'] = 'Unimplemented endpoint'
-    return error_dict, 500
-
-
 if __name__ == '__main__':
     app.debug = bool(os.environ.get('DEBUG'))
     app.run()

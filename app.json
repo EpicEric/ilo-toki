@@ -3,7 +3,7 @@
   "description": "Simple sentence translator for Toki Pona <--> English, based off data from Tatoeba",
   "image": "heroku/python",
   "repository": "https://github.com/epiceric/ilo-toki",
-  "keywords": ["python", "flask", "toki pona", "learning"],
+  "keywords": ["python", "flask", "toki pona", "translation", "learning"],
   "addons": ["heroku-postgresql"],
   "env": {
     "SECRET_KEY": {
