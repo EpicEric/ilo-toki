@@ -1,17 +1,22 @@
 <template>
-  <div id='app'>
-    <div v-if='error'>
-      <Error v-bind:error='error' />
-    </div>
-    <div v-else>
-      <div v-if='is_ready'>
-        <Translation v-bind:translation='current_translation' v-bind:show_english_first='show_english_first' v-bind:reveal_translation='reveal_translation' />
-        <Controls v-bind:reveal_translation='reveal_translation' v-on:action-reverse='onReverse' v-on:action-reveal='onReveal' v-on:action-skip='onSkip' v-on:action-next='onNext' />
+  <div id="app" class="relative flex items-center h-screen w-screen">
+    <Filters v-if="lesson_list.length > 0 && !error" :filter_data.sync="filter_data" v-bind:lesson_list="lesson_list" v-bind:show_english_first="show_english_first" v-on:action-reverse="onReverse" />
+    <div class="flex-grow">
+
+      <div v-if="error">
+        <Error v-bind:error="error" />
       </div>
+
       <div v-else>
-        <Loading />
+        <div v-if="is_ready">
+          <Translation v-bind:translation="current_translation" v-bind:show_english_first="show_english_first" v-bind:reveal_translation="reveal_translation" />
+          <Controls v-bind:reveal_translation="reveal_translation" v-on:action-reverse="onReverse" v-on:action-reveal="onReveal" v-on:action-skip="onSkip" v-on:action-next="onNext" />
+        </div>
+        <div v-else>
+          <Loading />
+        </div>
       </div>
-      <Filters :filter_data.sync='filter_data' v-bind:lesson_list='lesson_list' />
+
     </div>
   </div>
 </template>
@@ -81,7 +86,7 @@ export default {
   },
   methods: {
     fetchTranslations() {
-      let params = {}
+      const params = {}
       if (this.filter_data.filter_maximum_lesson) {
         params.maximum_lesson = this.filter_data.filter_maximum_lesson
       }

@@ -4,10 +4,8 @@ Simple web application and API to learn Toki Pona from a corpus of sentences and
 
 ## Features / ijo lon
 
-All of the following features are currently WIP. They are integrated into the persistence scripts and API, but are not yet available through a front-end.
-
 - Filter by [jan Pije's lessons](http://tokipona.net/tp/janpije/okamasona.php) if you are learning along.
-- Choose between translating English to Toki Pona, or the other way around, for dynamic studies.
+- Choose between translating English to Toki Pona or the other way around.
 - Found an error? Improve the original sentences on Tatoeba.
 
 ## Status / tenpo lon
@@ -38,7 +36,7 @@ The rest of the project is structured as follows:
 - `scripts/`: Database definitions and auxiliary scripts, such as scripts to download translations and insert to PostgreSQL. See the [README](scripts/README.md) for more information.
 - `Procfile` and `app.json`: Heroku's application and manifest files, respectively.
 - `.circleci`: CircleCI script to re-populate database every week.
-- `src/`, `public/`, and `*.js`: Frontend content and configuration, such as VueJS, PostCSS, Tailwind...
+- `src/`, `public/`, and `*.js`: Frontend content and configuration, such as VueJS, PostCSS, TailwindCSS...
 
 ## Environment variables / nimi ma
 
@@ -50,7 +48,7 @@ When running the Flask API, use these environment variables:
 
 When running the VueJS frontend, use these environment variables:
 
-- `VUE_APP_API_URL` (required for production): Base URL for the API. If unset, will use Flask's default location (`http://127.0.0.1:5000/`).
+- `VUE_APP_API_URL` (required for production): Base URL for the API. If unset, it will use Flask's default location (`http://127.0.0.1:5000/`).
 
 ## Attributions / jo pi jan ante
 
