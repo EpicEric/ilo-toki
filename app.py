@@ -13,7 +13,11 @@ DEFAULT_RANDOM_SAMPLE_SIZE = 25
 MAXIMUM_RANDOM_SAMPLE_SIZE = 100
 
 
-app = flask.Flask(__name__)
+app = flask.Flask(
+    __name__,
+    static_url_path='',
+    static_folder='dist',
+    template_folder='dist')
 flask_cors.CORS(app)
 app.config.from_mapping(
     SECRET_KEY = os.environ.get('SECRET_KEY', 'dev_key'),
@@ -86,6 +90,12 @@ def sentences():
         return error_dict
     data_dict = {'status': 'success', 'data': TranslationSchema().dump(rows, many=True)}
     return data_dict
+
+
+# Serve frontend index
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 
 if __name__ == '__main__':

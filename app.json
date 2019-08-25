@@ -1,14 +1,36 @@
 {
   "name": "ilo toki",
   "description": "Simple sentence translator for Toki Pona <--> English, based off data from Tatoeba",
-  "image": "heroku/python",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ],
   "repository": "https://github.com/epiceric/ilo-toki",
-  "keywords": ["python", "flask", "toki pona", "translation", "learning"],
+  "keywords": ["python", "flask", "vue", "toki pona", "translation", "learning"],
   "addons": ["heroku-postgresql"],
   "env": {
     "SECRET_KEY": {
-      "description": "This should be changed with `heroku config:set SECRET_KEY=\"`< /dev/urandom base64 | tr -dc 'a-zA-Z0-9' | head -c16`\"` after the initial deploy.",
-      "value": "MoQ8eZ9NffimN4DT"
+      "description": "A secret key for Flask. After the initial deploy, change with: heroku config:set SECRET_KEY=`< /dev/urandom base64 | tr -dc 'a-zA-Z0-9' | head -c16`",
+      "generator": "secret"
+    },
+    "NODE_ENV": {
+      "description": "This configuration is used for building Vue in production mode.",
+      "value": "production"
+    },
+    "VUE_APP_API_URL": {
+      "description": "URL for this app. It lets Vue know where the API is.",
+      "value": "https://ilo-toki.herokuapp.com/"
+    }
+  },
+  "environments": {
+    "test": {
+      "env": {
+        "SECRET_KEY": "MoQ8eZ9NffimN4DT"
+      }
     }
   }
 }

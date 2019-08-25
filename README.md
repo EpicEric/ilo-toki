@@ -12,9 +12,7 @@ Simple web application and API to learn Toki Pona from a corpus of sentences and
 
 | Service | Status |
 |---------|--------|
-| API | ![API badge](https://heroku-badge.herokuapp.com/?app=ilo-toki&root=api/healthcheck) |
 | Database script | [![Database script badge](https://circleci.com/gh/EpicEric/ilo-toki.svg?style=svg)](https://circleci.com/gh/EpicEric/ilo-toki) |
-| Frontend | ![Frontend badge](https://img.shields.io/badge/-WIP-inactive)
 
 ## Project structure / sijelo ilo
 
@@ -48,10 +46,10 @@ When running the Flask API, use these environment variables:
 
 When running the VueJS frontend, use these environment variables:
 
-- `VUE_APP_API_URL` (required for production): Base URL for the API. If unset, it will use Flask's default location (`http://127.0.0.1:5000/`).
+- `VUE_APP_API_URL` (required for production): Base URL for the API. If unset, it will use Flask's default development location (`http://127.0.0.1:5000/`).
 
 ## Attributions / jo pi jan ante
 
-The API application and PostgreSQL database are hosted in Heroku with their free plans.
+The application and PostgreSQL database are hosted in Heroku with their free plans.
 
 The [translation files](https://tatoeba.org/eng/downloads) are provided by Tatoeba under CC BY 2.0 FR.
