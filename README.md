@@ -1,4 +1,6 @@
-# ilo toki
+# (DEPRECATED) ilo toki
+
+**With Heroku's change of free plan, this project no longer works.**
 
 Simple web application and API to learn Toki Pona from a corpus of sentences and their English translations.
 
@@ -7,12 +9,6 @@ Simple web application and API to learn Toki Pona from a corpus of sentences and
 - Filter by [jan Pije's lessons](http://tokipona.net/tp/janpije/okamasona.php) if you are learning along.
 - Choose between translating English to Toki Pona or the other way around.
 - Found an error? Improve the original sentences on Tatoeba.
-
-## Status / tenpo lon
-
-| Service | Status |
-|---------|--------|
-| Database script | [![Database script badge](https://circleci.com/gh/EpicEric/ilo-toki.svg?style=svg)](https://circleci.com/gh/EpicEric/ilo-toki) |
 
 ## Project structure / sijelo ilo
 
